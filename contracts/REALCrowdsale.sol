@@ -1,10 +1,21 @@
 pragma solidity ^0.4.11;
 
+/*
+    Copyright 2017, Jordi Baylina
 
-import "./Owned.sol";
-import "./TokenController.sol";
-import "./ApproveAndCallFallback.sol";
-import "./Controlled.sol";
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /// @title REALCrowdsale Contract
 /// @author Jordi Baylina
@@ -14,6 +25,12 @@ import "./Controlled.sol";
 ///  be sent to the REAL token contract. The ETH is sent to this contract and from here,
 ///  ETH is sent to the contribution walled and REALs are mined according to the defined
 ///  rules.
+
+
+import "./Owned.sol";
+import "./MiniMeToken.sol";
+import "./SafeMath.sol";
+import "./ERC20Token.sol";
 
 
 contract REALCrowdsale is Owned, TokenController {
@@ -182,10 +199,7 @@ contract REALCrowdsale is Owned, TokenController {
         require(getBlockNumber().sub(lastCallBlock[caller]) >= maxCallFrequency);
         lastCallBlock[caller] = getBlockNumber();
 
-
-        //TODO: dynamicCeiling
-        //uint256 toCollect = dynamicCeiling.toCollect(totalNormalCollected);
-        uint256 toCollect = totalNormalCollected;
+        uint256 toCollect = fundingLimit - totalNormalCollected;
 
         uint256 toFund;
         if (msg.value <= toCollect) {
@@ -271,14 +285,10 @@ contract REALCrowdsale is Owned, TokenController {
 
         finalizedBlock = getBlockNumber();
         finalizedTime = now;
-        //TODO: review percents
-        uint256 percentageToDevs = percent(20);  // 20%
 
+        uint256 percentageToTeam = percent(20);
 
-        //
-        //  % To Contributors = 41% + (10% - % to SGT holders)
-        //
-        uint256 percentageToContributors = percent(41).add(percent(10));
+        uint256 percentageToContributors = percent(41);
 
         uint256 percentageToReserve = percent(29);
 
@@ -303,8 +313,6 @@ contract REALCrowdsale is Owned, TokenController {
         uint256 totalTokens = REAL.totalSupply().mul(percent(100)).div(percentageToContributors);
 
 
-        // Generate tokens for SGT Holders.
-
         //
         //                    percentageToReserve
         //  reserveTokens = ----------------------- * totalTokens
@@ -316,13 +324,13 @@ contract REALCrowdsale is Owned, TokenController {
 
 
         //
-        //                   percentageToDevs
-        //  devTokens = ----------------------- * totalTokens
+        //                   percentageToTeam
+        //  teamTokens = ----------------------- * totalTokens
         //                   percentage(100)
         //
         assert(REAL.generateTokens(
-            destTokensDevs,
-            totalTokens.mul(percentageToDevs).div(percent(100))));
+            destTokensTeam,
+            totalTokens.mul(percentageToTeam).div(percent(100))));
 
         REAL.changeController(realController);
 
