@@ -24,11 +24,6 @@ pragma solidity ^0.4.11;
 ///  period. So all the ETH collected will be locked here until the contribution
 ///  period ends
 
-// @dev Contract to hold sale raised funds during the sale period.
-// Prevents attack in which the Aragon Multisig sends raised ether
-// to the sale contract to mint tokens to itself, and getting the
-// funds back immediately.
-
 
 import "./REALCrowdsale.sol";
 
