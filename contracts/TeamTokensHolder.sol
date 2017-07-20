@@ -44,7 +44,7 @@ pragma solidity ^0.4.11;
 
 import "./MiniMeToken.sol";
 import "./REALCrowdsale.sol";
-import "./SafeMath.sol";
+import "./misc/SafeMath.sol";
 import "./ERC20Token.sol";
 
 

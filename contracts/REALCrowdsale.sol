@@ -27,9 +27,9 @@ pragma solidity ^0.4.11;
 ///  rules.
 
 
-import "./Owned.sol";
+import "./interface/Owned.sol";
 import "./MiniMeToken.sol";
-import "./SafeMath.sol";
+import "./misc/SafeMath.sol";
 import "./ERC20Token.sol";
 
 
