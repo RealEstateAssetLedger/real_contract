@@ -42,10 +42,10 @@ pragma solidity ^0.4.11;
 //       End
 
 
-import "./MiniMeToken.sol";
-import "./REALCrowdsale.sol";
-import "./misc/SafeMath.sol";
-import "./ERC20Token.sol";
+import "REALToken/MiniMeToken.sol";
+import "REALCrowdsale.sol";
+import "misc/SafeMath.sol";
+import "REALToken/ERC20Token.sol";
 
 
 contract TeamTokensHolder is Owned {

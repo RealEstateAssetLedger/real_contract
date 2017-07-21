@@ -28,9 +28,9 @@ pragma solidity ^0.4.11;
 
 
 import "./interface/Owned.sol";
-import "./MiniMeToken.sol";
+import "./REALToken/MiniMeToken.sol";
 import "./misc/SafeMath.sol";
-import "./ERC20Token.sol";
+import "./REALToken/ERC20Token.sol";
 
 
 contract REALCrowdsale is Owned, TokenController {
@@ -47,9 +47,9 @@ contract REALCrowdsale is Owned, TokenController {
     uint256 public startBlock;
     uint256 public endBlock;
 
-    address public destEthDevs;
+    address public destEthTeam;
 
-    address public destTokensDevs;
+    address public destTokensTeam;
     address public destTokensReserve;
 
     address public realController;
@@ -97,16 +97,16 @@ contract REALCrowdsale is Owned, TokenController {
     ///  the contribution finalizes.
     /// @param _startBlock Block when the contribution period starts
     /// @param _endBlock The last block that the contribution period is active
-    /// @param _destEthDevs Destination address where the contribution ether is sent
+    /// @param _destEthTeam Destination address where the contribution ether is sent
     /// @param _destTokensReserve Address where the tokens for the reserve are sent
     function initialize(
         address _real,
         address _realController,
         uint256 _startBlock,
         uint256 _endBlock,
-        address _destEthDevs,
+        address _destEthTeam,
         address _destTokensReserve,
-        address _destTokensDevs
+        address _destTokensTeam
     ) public onlyOwner {
         // Initialize only once
         require(address(REAL) == 0x0);
@@ -124,14 +124,14 @@ contract REALCrowdsale is Owned, TokenController {
         startBlock = _startBlock;
         endBlock = _endBlock;
 
-        require(_destEthDevs != 0x0);
-        destEthDevs = _destEthDevs;
+        require(_destEthTeam != 0x0);
+        destEthTeam = _destEthTeam;
 
         require(_destTokensReserve != 0x0);
         destTokensReserve = _destTokensReserve;
 
-        require(_destTokensDevs != 0x0);
-        destTokensDevs = _destTokensDevs;
+        require(_destTokensTeam != 0x0);
+        destTokensTeam = _destTokensTeam;
     }
 
     /// @notice Sets the limit for a guaranteed address. All the guaranteed addresses
@@ -233,7 +233,7 @@ contract REALCrowdsale is Owned, TokenController {
         if (_toFund > 0) {
             uint256 tokensGenerated = _toFund.mul(exchangeRate);
             assert(REAL.generateTokens(_th, tokensGenerated));
-            destEthDevs.transfer(_toFund);
+            destEthTeam.transfer(_toFund);
             NewSale(_th, _toFund, tokensGenerated, _guaranteed);
         }
 
@@ -287,7 +287,7 @@ contract REALCrowdsale is Owned, TokenController {
 
         uint256 percentageToTeam = percent(20);
 
-        uint256 percentageToContributors = percent(41);
+        uint256 percentageToContributors = percent(51);
 
         uint256 percentageToReserve = percent(29);
 

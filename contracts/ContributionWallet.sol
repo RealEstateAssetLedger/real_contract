@@ -25,7 +25,7 @@ pragma solidity ^0.4.11;
 ///  period ends
 
 
-import "./REALCrowdsale.sol";
+import "REALCrowdsale.sol";
 
 
 contract ContributionWallet {

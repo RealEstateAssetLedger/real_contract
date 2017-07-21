@@ -1,9 +1,9 @@
 pragma solidity ^0.4.11;
 
-import "./interface/Owned.sol";
-import "./ERC20Token.sol";
-import "./misc/SafeMath.sol";
-import "./REALCrowdsale.sol";
+import "interface/Owned.sol";
+import "REALToken/ERC20Token.sol";
+import "misc/SafeMath.sol";
+import "REALCrowdsale.sol";
 
 
 /// @title DevTokensHolder Contract
