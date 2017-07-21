@@ -106,8 +106,7 @@ contract REALCrowdsale is Owned, TokenController {
         uint256 _endBlock,
         address _destEthDevs,
         address _destTokensReserve,
-        address _destTokensDevs,
-
+        address _destTokensDevs
     ) public onlyOwner {
         // Initialize only once
         require(address(REAL) == 0x0);

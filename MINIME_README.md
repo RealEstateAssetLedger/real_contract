@@ -1,4 +1,4 @@
-# Aragon Network Token
+# REAL Token
 
 The MiniMeToken contract is a standard ERC20 token with extra functionality:
 

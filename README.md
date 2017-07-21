@@ -39,13 +39,14 @@ REAL is slightly diverges with the ERC20 standard, on invalid token transactions
 
 Token:
 
-- [REAL.sol](/contracts/ANT.sol): Main contract for the token. Derives MiniMeToken.
+- [REAL.sol](/contracts/REAL.sol): Main contract for the token. Derives MiniMeToken.
 - [MiniMeToken.sol](/contracts/MiniMeToken.sol): Token implementation.
 
 Sale:
 
 - [RealCrowdsale.sol](/contracts/RealCrowdsale.sol): Implementation of the initial distribution of REAL.
-- [ContributionWallet.sol](/contracts/ContributionWallet.sol): Simple contract that will hold all funds until final block of the sale.
+- [DevTokensHolder.sol](/contracts/DevTokensHolder.sol): Simple contract that will hold all dev funds until final block of the sale.
+- [TeamTokensHolder.sol](/contracts/TeamTokensHolder.sol): Simple contract that will hold all team funds until final block of the sale.
 - [MultisigWallet.sol](/contracts/MultisigWallet.sol): Gnosis multisig used for REAL and community multisigs.
 
 ## Reviewers and audits
