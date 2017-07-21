@@ -44,9 +44,9 @@ Token:
 
 Sale:
 
-- [RealCrowdsale.sol](/contracts/RealCrowdsale.sol): Implementation of the initial distribution of REAL.
+- [RealCrowdsale.sol](/contracts/REALCrowdsale.sol): Implementation of the initial distribution of REAL.
 - [DevTokensHolder.sol](/contracts/DevTokensHolder.sol): Simple contract that will hold all dev funds until final block of the sale.
 - [TeamTokensHolder.sol](/contracts/TeamTokensHolder.sol): Simple contract that will hold all team funds until final block of the sale.
-- [MultisigWallet.sol](/contracts/MultisigWallet.sol): Gnosis multisig used for REAL and community multisigs.
+- [MultisigWallet.sol](/contracts/MultiSigWallet.sol): Gnosis multisig used for REAL and community multisigs.
 
 ## Reviewers and audits
