@@ -1,6 +1,6 @@
 # REAL Token
 
-<img src="resources/real.jpg"/>
+<img width="200px" src="assets/logo_real.png"/>
 
 Important resources:
 - If integrating REAL in an exchange or automated system, please read: [A note for exchanges or holders interacting with REAL in an automated manner](https://real.markets)
@@ -39,8 +39,8 @@ REAL is slightly diverges with the ERC20 standard, on invalid token transactions
 
 Token:
 
-- [REAL.sol](/contracts/REAL.sol): Main contract for the token. Derives MiniMeToken.
-- [MiniMeToken.sol](/contracts/MiniMeToken.sol): Token implementation.
+- [REAL.sol](/contracts/REALToken/REAL.sol): Main contract for the token. Derives MiniMeToken.
+- [MiniMeToken.sol](/contracts/REALToken/MiniMeToken.sol): Token implementation.
 
 Sale:
 
