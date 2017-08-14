@@ -1,9 +1,9 @@
 pragma solidity ^0.4.11;
 
-import "interface/Owned.sol";
-import "REALToken/ERC20Token.sol";
-import "misc/SafeMath.sol";
-import "REALCrowdsale.sol";
+import "./Owned.sol";
+import "./ERC20Token.sol";
+import "./SafeMath.sol";
+import "./REALCrowdsale.sol";
 
 
 /// @title DevTokensHolder Contract
@@ -53,9 +53,15 @@ contract DevTokensHolder is Owned {
 
         uint256 finalizedTime = crowdsale.finalizedTime();
 
+        Message("Required time");
+
         require(finalizedTime > 0 && getTime() > finalizedTime.add(months(6)));
 
+        Message("Passed require");
+
         uint256 canExtract = total.mul(getTime().sub(finalizedTime)).div(months(24));
+
+        Message("Can extract");
 
         canExtract = canExtract.sub(collectedTokens);
 
@@ -101,4 +107,5 @@ contract DevTokensHolder is Owned {
 
     event ClaimedTokens(address indexed _token, address indexed _controller, uint256 _amount);
     event TokensWithdrawn(address indexed _holder, uint256 _amount);
+    event Message(bytes message);
 }

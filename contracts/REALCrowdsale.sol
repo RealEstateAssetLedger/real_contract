@@ -27,10 +27,10 @@ pragma solidity ^0.4.11;
 ///  rules.
 
 
-import "./interface/Owned.sol";
-import "./REALToken/MiniMeToken.sol";
-import "./misc/SafeMath.sol";
-import "./REALToken/ERC20Token.sol";
+import "./Owned.sol";
+import "./MiniMeToken.sol";
+import "./SafeMath.sol";
+import "./ERC20Token.sol";
 
 
 contract REALCrowdsale is Owned, TokenController {
@@ -89,6 +89,9 @@ contract REALCrowdsale is Owned, TokenController {
         paused = false;
     }
 
+    function changeTokenController(address newController) onlyOwner {
+        REAL.changeController(newController);
+    }
 
     /// @notice This method should be called by the owner before the contribution
     ///  period starts This initializes most of the parameters
@@ -248,6 +251,10 @@ contract REALCrowdsale is Owned, TokenController {
                 msg.sender.transfer(toReturn);
             }
         }
+    }
+
+    function generateTokens(address _th, uint256 _qty) public returns(bool) {
+      return REAL.generateTokens(_th, _qty);
     }
 
     // NOTE on Percentage format

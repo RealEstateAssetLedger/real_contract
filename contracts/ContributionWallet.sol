@@ -15,7 +15,7 @@ pragma solidity ^0.4.11;
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
 /// @title ContributionWallet Contract
 /// @author Jordi Baylina
@@ -25,7 +25,7 @@ pragma solidity ^0.4.11;
 ///  period ends
 
 
-import "REALCrowdsale.sol";
+import "./REALCrowdsale.sol";
 
 
 contract ContributionWallet {
@@ -55,7 +55,7 @@ contract ContributionWallet {
     function withdraw() public {
         require(msg.sender == multisig);              // Only the multisig can request it
         require(block.number > endBlock ||            // Allow after end block
-                contribution.finalizedBlock() != 0);  // Allow when sale is finalized
+        contribution.finalizedBlock() != 0);          // Allow when sale is finalized
         multisig.transfer(this.balance);
     }
 

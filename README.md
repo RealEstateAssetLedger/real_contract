@@ -4,6 +4,7 @@
 
 Important resources:
 - If integrating REAL in an exchange or automated system, please read: [A note for exchanges or holders interacting with REAL in an automated manner](https://real.markets)
+- [Sale spec](SPEC.md)
 - [Presale allocation details](/PRESALE.md)
 - [Multisig structure](/MULTISIG.md)
 - [Token sale flow](/SALE_FLOW.md)

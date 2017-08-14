@@ -1,7 +1,7 @@
 pragma solidity ^0.4.11;
 
 
-import "MiniMeToken.sol";
+import "./MiniMeToken.sol";
 
 
 contract REAL is MiniMeToken {

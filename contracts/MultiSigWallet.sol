@@ -31,6 +31,7 @@ contract MultiSigWallet {
         bool executed;
     }
 
+
     modifier onlyWallet() {
         if (msg.sender != address(this))
             throw;

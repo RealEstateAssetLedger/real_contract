@@ -1,0 +1,32 @@
+{
+    "name": "real-token",
+    "version": "0.1.0",
+    "description": "REAL token",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/RealEstateAssetLedger/real_contract"
+    },
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/RealEstateAssetLedger/real_contract/issues"
+    },
+    "homepage": "https://github.com/RealEstateAssetLedger/real_contract",
+    "devDependencies": {
+        "async": "^2.4.0",
+        "bignumber.js": "^4.0.2",
+        "ethereumjs-testrpc": "^3.0.5",
+        "random-bytes": "^1.0.0",
+        "truffle": "3.2.4",
+        "truffle-hdwallet-provider": "0.0.3",
+        "web3": "^0.18.4"
+    },
+    "dependencies": {},
+    "main": "truffle.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "REAL Estate Assed Ledger"
+}
