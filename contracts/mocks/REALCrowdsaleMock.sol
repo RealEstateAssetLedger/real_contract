@@ -18,7 +18,4 @@ contract REALCrowdsaleMock is REALCrowdsale {
 
     uint mock_blockNumber = 1;
 
-    function setMockedTotalCollected(uint collected) public {
-      totalNormalCollected = collected;
-    }
 }

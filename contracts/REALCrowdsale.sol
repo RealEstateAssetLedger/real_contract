@@ -239,51 +239,65 @@ contract REALCrowdsale is Owned, TokenController {
         assert(msg.value >= _toFund);  // Not needed, but double check.
         assert(totalCollected() <= failSafeLimit);
 
-        LogQuantity(_toFund, "to Fund");
+        uint256 collected = totalCollected();
+        collected = collected.sub(_toFund);
 
         if (_toFund > 0) {
             uint256 tokensGenerated = _toFund.mul(exchangeRate);
             uint256 tokensToBonusCap = 0;
             uint256 tokensToNextBonusCap = 0;
             uint256 tokensToAdd = 0;
+            uint256 bonusTokens = 0;
 
             if(_guaranteed) {
               tokensToAdd = tokensGenerated.percent(bonus1);
               tokensGenerated = tokensGenerated + tokensToAdd;
-            } else if (totalCollected() < bonus1cap) {
-              if (totalCollected().add(_toFund) < bonus1cap) {
+            } else if (collected < bonus1cap) {
+              if (collected.add(_toFund) < bonus1cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus1));
+
               } else {
-                tokensToBonusCap = tokensGenerated.add(bonus1cap.sub(totalCollected()).percent(bonus1));
-                tokensToNextBonusCap = totalCollected().add(_toFund).sub(bonus1cap).percent(bonus2);
+                bonusTokens = bonus1cap.sub(collected).percent(bonus1).mul(exchangeRate);
+                tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                tokensToNextBonusCap = collected.add(_toFund).sub(bonus1cap).percent(bonus2).mul(exchangeRate);
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+
               }
-            } else if (totalCollected() < bonus2cap) {
-              if (totalCollected().add(_toFund) < bonus2cap) {
+            } else if (collected < bonus2cap) {
+              if (collected.add(_toFund) < bonus2cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus2));
+
               } else {
-                tokensToBonusCap = tokensGenerated.add(bonus2cap.sub(totalCollected()).percent(bonus2));
-                tokensToNextBonusCap = totalCollected().add(_toFund).sub(bonus2cap).percent(bonus3);
+                bonusTokens = bonus2cap.sub(collected).percent(bonus2).mul(exchangeRate);
+                tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                tokensToNextBonusCap = collected.add(_toFund).sub(bonus2cap).percent(bonus3).mul(exchangeRate);
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+
               }
-            } else if (totalCollected() < bonus3cap) {
-              if (totalCollected().add(_toFund) < bonus3cap) {
+            } else if (collected < bonus3cap) {
+              if (collected.add(_toFund) < bonus3cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus3));
+
               } else {
-                tokensToBonusCap = tokensGenerated.add(bonus3cap.sub(totalCollected()).percent(bonus3));
-                tokensToNextBonusCap = totalCollected().add(_toFund).sub(bonus3cap).percent(bonus4);
+                bonusTokens = bonus3cap.sub(collected).percent(bonus3).mul(exchangeRate);
+                tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                tokensToNextBonusCap = collected.add(_toFund).sub(bonus3cap).percent(bonus4).mul(exchangeRate);
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+
               }
-            } else if (totalCollected() < bonus4cap) {
-              if (totalCollected().add(_toFund) < bonus4cap) {
+            } else if (collected < bonus4cap) {
+              if (collected.add(_toFund) < bonus4cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus4));
+
               } else {
-                tokensGenerated = tokensGenerated.add(bonus4cap.sub(totalCollected()).percent(bonus4));
+                bonusTokens = bonus4cap.sub(collected).percent(bonus4).mul(exchangeRate);
+                tokensGenerated = tokensGenerated.add(bonusTokens);
               }
             }
 
             assert(REAL.generateTokens(_th, tokensGenerated));
             destEthTeam.transfer(_toFund);
+
             NewSale(_th, _toFund, tokensGenerated, _guaranteed);
         }
 
