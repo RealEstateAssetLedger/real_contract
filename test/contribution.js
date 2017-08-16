@@ -139,8 +139,8 @@ contract("REALCrowdsale", function(accounts) {
         const balance7 = await real.balanceOf(addressGuaranteed0);
         const balance8 = await real.balanceOf(addressGuaranteed1);
 
-        assert.equal(web3.fromWei(balance7).toNumber(), 250);
-        assert.equal(web3.fromWei(balance8).toNumber(), 500);
+        assert.equal(web3.fromWei(balance7).toNumber(), (220 * 1.25));
+        assert.equal(web3.fromWei(balance8).toNumber(), (440 * 1.25));
     });
 
     it("Finalizes", async function() {

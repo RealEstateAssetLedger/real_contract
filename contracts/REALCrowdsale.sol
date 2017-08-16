@@ -36,12 +36,21 @@ import "./ERC20Token.sol";
 contract REALCrowdsale is Owned, TokenController {
     using SafeMath for uint256;
 
-    uint256 constant public fundingLimit = 400000 ether;
-    uint256 constant public failSafeLimit = 500000 ether;
+    uint256 constant public fundingLimit = 200000 ether;
+    uint256 constant public failSafeLimit = 400000 ether;
     uint256 constant public maxGuaranteedLimit = 30000 ether;
-    uint256 constant public exchangeRate = 250;
+    uint256 constant public exchangeRate = 220;
     uint256 constant public maxGasPrice = 50000000000;
     uint256 constant public maxCallFrequency = 100;
+
+    uint256 constant public bonus1cap = 40000 ether;
+    uint256 constant public bonus1 = 25;
+    uint256 constant public bonus2cap = 80000 ether;
+    uint256 constant public bonus2 = 15;
+    uint256 constant public bonus3cap = 120000 ether;
+    uint256 constant public bonus3 = 10;
+    uint256 constant public bonus4cap = 160000 ether;
+    uint256 constant public bonus4 = 5;
 
     MiniMeToken public REAL;
     uint256 public startBlock;
@@ -89,9 +98,6 @@ contract REALCrowdsale is Owned, TokenController {
         paused = false;
     }
 
-    function changeTokenController(address newController) onlyOwner {
-        REAL.changeController(newController);
-    }
 
     /// @notice This method should be called by the owner before the contribution
     ///  period starts This initializes most of the parameters
@@ -233,8 +239,49 @@ contract REALCrowdsale is Owned, TokenController {
         assert(msg.value >= _toFund);  // Not needed, but double check.
         assert(totalCollected() <= failSafeLimit);
 
+        LogQuantity(_toFund, "to Fund");
+
         if (_toFund > 0) {
             uint256 tokensGenerated = _toFund.mul(exchangeRate);
+            uint256 tokensToBonusCap = 0;
+            uint256 tokensToNextBonusCap = 0;
+            uint256 tokensToAdd = 0;
+
+            if(_guaranteed) {
+              tokensToAdd = tokensGenerated.percent(bonus1);
+              tokensGenerated = tokensGenerated + tokensToAdd;
+            } else if (totalCollected() < bonus1cap) {
+              if (totalCollected().add(_toFund) < bonus1cap) {
+                tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus1));
+              } else {
+                tokensToBonusCap = tokensGenerated.add(bonus1cap.sub(totalCollected()).percent(bonus1));
+                tokensToNextBonusCap = totalCollected().add(_toFund).sub(bonus1cap).percent(bonus2);
+                tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+              }
+            } else if (totalCollected() < bonus2cap) {
+              if (totalCollected().add(_toFund) < bonus2cap) {
+                tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus2));
+              } else {
+                tokensToBonusCap = tokensGenerated.add(bonus2cap.sub(totalCollected()).percent(bonus2));
+                tokensToNextBonusCap = totalCollected().add(_toFund).sub(bonus2cap).percent(bonus3);
+                tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+              }
+            } else if (totalCollected() < bonus3cap) {
+              if (totalCollected().add(_toFund) < bonus3cap) {
+                tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus3));
+              } else {
+                tokensToBonusCap = tokensGenerated.add(bonus3cap.sub(totalCollected()).percent(bonus3));
+                tokensToNextBonusCap = totalCollected().add(_toFund).sub(bonus3cap).percent(bonus4);
+                tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+              }
+            } else if (totalCollected() < bonus4cap) {
+              if (totalCollected().add(_toFund) < bonus4cap) {
+                tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus4));
+              } else {
+                tokensGenerated = tokensGenerated.add(bonus4cap.sub(totalCollected()).percent(bonus4));
+              }
+            }
+
             assert(REAL.generateTokens(_th, tokensGenerated));
             destEthTeam.transfer(_toFund);
             NewSale(_th, _toFund, tokensGenerated, _guaranteed);
@@ -251,10 +298,6 @@ contract REALCrowdsale is Owned, TokenController {
                 msg.sender.transfer(toReturn);
             }
         }
-    }
-
-    function generateTokens(address _th, uint256 _qty) public returns(bool) {
-      return REAL.generateTokens(_th, _qty);
     }
 
     // NOTE on Percentage format
@@ -423,4 +466,5 @@ contract REALCrowdsale is Owned, TokenController {
     event NewSale(address indexed _th, uint256 _amount, uint256 _tokens, bool _guaranteed);
     event GuaranteedAddress(address indexed _th, uint256 _limit);
     event Finalized();
+    event LogQuantity(uint256 _amount, string _message);
 }

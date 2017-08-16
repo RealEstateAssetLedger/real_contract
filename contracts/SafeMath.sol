@@ -44,4 +44,8 @@ library SafeMath {
   function min256(uint256 a, uint256 b) internal constant returns (uint256) {
     return a < b ? a : b;
   }
+
+  function percent(uint a, uint b) internal returns (uint) {
+    return b * a / 100;
+  }
 }
