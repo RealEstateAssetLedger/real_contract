@@ -50,7 +50,7 @@ contract REALPlaceHolder is TokenController, Owned {
         contribution = REALCrowdsale(_contribution);
     }
 
-    /// @notice The owner of this contract can change the controller of the SNT token
+    /// @notice The owner of this contract can change the controller of the REAL token
     ///  Please, be sure that the owner is a trusted agent or 0x0 address.
     /// @param _newController The address of the new controller
 

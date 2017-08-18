@@ -1,9 +1,7 @@
-const randomBytes = require("random-bytes");
-
 const MultiSigWallet = artifacts.require("MultiSigWallet");
 const MiniMeTokenFactory = artifacts.require("MiniMeTokenFactory");
 const REAL = artifacts.require("REAL");
-const REALCrowdsale = artifacts.require("RealCrowdsale");
+const REALCrowdsale = artifacts.require("REALCrowdsale");
 const ContributionWallet = artifacts.require("ContributionWallet");
 const DevTokensHolder = artifacts.require("DevTokensHolder");
 const REALPlaceHolder = artifacts.require("REALPlaceHolder");

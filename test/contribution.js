@@ -16,6 +16,7 @@ contract("REALCrowdsale", function(accounts) {
     const addressReserve = accounts[2];
     const addressDevs = accounts[3];
     const addressREALHolder = accounts[4];
+
     const addressGuaranteed0 = accounts[7];
     const addressGuaranteed1 = accounts[8];
 
@@ -183,6 +184,9 @@ contract("REALCrowdsale", function(accounts) {
         const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;
         await realPlaceHolder.setMockedTime(t);
 
+        const balance = await real.balanceOf(addressReal);
+        console.log(web3.fromWei(balance).toNumber());
+
         await real.transfer(accounts[5], web3.toWei(250));
 
         const balance2 = await real.balanceOf(accounts[5]);
@@ -223,9 +227,9 @@ contract("REALCrowdsale", function(accounts) {
       const realTokens = web3.fromWei(balance).toNumber();
 
       assert.equal(realTokens, calcTokens);
-    });*/
+    });
 
-    /*it("Allows devs to extract everything after 24 months", async function() {
+    it("Allows devs to extract everything after 24 months", async function() {
       const t = Math.floor(new Date().getTime() / 1000) + (86400 * 360 * 2);
       await devTokensHolder.setMockedTime(t);
 
