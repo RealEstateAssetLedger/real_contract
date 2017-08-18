@@ -197,7 +197,7 @@ contract("REALCrowdsale", function(accounts) {
      const balance2 = await real.balanceOf(accounts[5]);
 
      assert.equal(web3.fromWei(balance2).toNumber(), 250);
-     });*/
+   });*/
 
     it("Disallows devs from transfering before 6 months have past", async function() {
         const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;

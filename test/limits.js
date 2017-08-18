@@ -113,102 +113,118 @@ contract("REALCrowdsale", function(accounts) {
       var balanceTest1 = await real.balanceOf(addressTest1);
       assert.equal(web3.fromWei(balanceTest1).toNumber(), 220*1.25);
 
-      await real.sendTransaction({value: web3.toWei(39949), gas: 300000, from: addressTestDummy}); //39950
+      await real.sendTransaction({value: web3.toWei(24949), gas: 300000, from: addressTestDummy}); //24950
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 39950);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 24950);
 
       await realCrowdsale.setMockedBlockNumber(1001000);
       await real.setMockedBlockNumber(1001000);
 
-      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest1}); //40050
+      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest1}); //25050
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 40050);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 25050);
       balanceTest1 = await real.balanceOf(addressTest1);
       assert.equal(web3.fromWei(balanceTest1).toNumber(), (1*220*1.25)+(50*220*1.25)+(50*220*1.15));
 
-      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //40300
+      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //25300
       await realCrowdsale.setMockedBlockNumber(1002000);
       await real.setMockedBlockNumber(1002000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 40300);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 25300);
 
-      await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest2}); //40310
+      await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest2}); //25310
       var balanceTest2 = await real.balanceOf(addressTest2);
       assert.equal(web3.fromWei(balanceTest2).toNumber(), 10*220*1.15);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 40310);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 25310);
 
 
-      await real.sendTransaction({value: web3.toWei(39640), gas: 300000, from: addressTestDummy}); //79950
+      await real.sendTransaction({value: web3.toWei(24640), gas: 300000, from: addressTestDummy}); //49950
       await realCrowdsale.setMockedBlockNumber(1003000);
       await real.setMockedBlockNumber(1003000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 79950);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 49950);
 
-      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest2}); //80050
+      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest2}); //50050
       balanceTest2 = await real.balanceOf(addressTest2);
       assert.equal(web3.fromWei(balanceTest2).toNumber(), 10*220*1.15+(50*220*1.15)+(50*220*1.10));
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 80050);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 50050);
 
-      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //80300
+      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //50300
       await realCrowdsale.setMockedBlockNumber(1004000);
       await real.setMockedBlockNumber(1004000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 80300);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 50300);
 
-      await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest3}); //80310
+      await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest3}); //50310
       var balanceTest3 = await real.balanceOf(addressTest3);
       assert.equal(web3.fromWei(balanceTest3).toNumber(), 10*220*1.10);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 80310);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 50310);
 
-      await real.sendTransaction({value: web3.toWei(39640), gas: 300000, from: addressTestDummy});//119950
+      await real.sendTransaction({value: web3.toWei(49640), gas: 300000, from: addressTestDummy});//99950
       await realCrowdsale.setMockedBlockNumber(1005000);
       await real.setMockedBlockNumber(1005000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 119950);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 99950);
 
-      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest3}); //120050
+      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest3}); //100050
       balanceTest3 = await real.balanceOf(addressTest3);
       assert.equal(web3.fromWei(balanceTest3).toNumber(), 10*220*1.10+(50*220*1.10)+(50*220*1.05));
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 120050);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 100050);
 
-      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //120300
+      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //100300
       await realCrowdsale.setMockedBlockNumber(1006000);
       await real.setMockedBlockNumber(1006000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 120300);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 100300);
 
-      await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest4}); //120310
+      await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest4}); //100310
       var balanceTest4 = await real.balanceOf(addressTest4);
       assert.equal(web3.fromWei(balanceTest4).toNumber(), 10*220*1.05);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 120310);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 100310);
 
-      await real.sendTransaction({value: web3.toWei(39640), gas: 300000, from: addressTestDummy}); //159950
+      await real.sendTransaction({value: web3.toWei(49640), gas: 300000, from: addressTestDummy}); //149950
       await realCrowdsale.setMockedBlockNumber(1007000);
       await real.setMockedBlockNumber(1007000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 159950);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 149950);
 
-      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest4}); //160050
+      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest4}); //150050
       balanceTest4 = await real.balanceOf(addressTest4);
       assert.equal(web3.fromWei(balanceTest4).toNumber(), 10*220*1.05+(50*220*1.05)+(50*220));
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 160050);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 150050);
 
-      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //160300
+      await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //150300
       await realCrowdsale.setMockedBlockNumber(1008000);
       await real.setMockedBlockNumber(1008000);
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 160300);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 150300);
 
-      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest4}); //160400
+      await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest4}); //150400
       balanceTest4 = await real.balanceOf(addressTest4);
       assert.equal(web3.fromWei(balanceTest4).toNumber(), 10*220*1.05+(50*220*1.05)+(150*220));
       currentTotalCollected = await realCrowdsale.totalCollected();
-      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 160400);
+      //console.log(web3.fromWei(currentTotalCollected).toNumber());
+      assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 150400);
     });
 });
