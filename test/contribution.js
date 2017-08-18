@@ -14,6 +14,7 @@ contract("REALCrowdsale", function(accounts) {
     const addressReal = accounts[0];
     const addressCommunity = accounts[1];
     const addressReserve = accounts[2];
+    const addressBounties = accounts[9];
     const addressDevs = accounts[3];
     const addressREALHolder = accounts[4];
 
@@ -23,6 +24,7 @@ contract("REALCrowdsale", function(accounts) {
     let multisigReal;
     let multisigCommunity;
     let multisigReserve;
+    let multisigBounties;
     let multisigDevs;
     let miniMeTokenFactory;
     let real;
@@ -40,6 +42,7 @@ contract("REALCrowdsale", function(accounts) {
         multisigReal = await MultiSigWallet.new([addressReal], 1);
         multisigCommunity = await MultiSigWallet.new([addressCommunity], 1);
         multisigReserve = await MultiSigWallet.new([addressReserve], 1);
+        multisigBounties = await MultiSigWallet.new([addressBounties], 1);
         multisigDevs = await MultiSigWallet.new([addressDevs], 1);
 
         miniMeTokenFactory = await MiniMeTokenFactory.new();
@@ -74,7 +77,8 @@ contract("REALCrowdsale", function(accounts) {
             contributionWallet.address,
 
             multisigReserve.address,
-            devTokensHolder.address);
+            devTokensHolder.address,
+            multisigBounties.address);
     });
 
     it("Checks initial parameters", async function() {
@@ -107,6 +111,7 @@ contract("REALCrowdsale", function(accounts) {
         });
         await realCrowdsale.resumeContribution();
     });
+
     it("Returns the remaining of the last transaction ", async function() {
         const initialBalance = await web3.eth.getBalance(addressReal);
         await real.sendTransaction({value: web3.toWei(5), gas: 300000, gasPrice: "20000000000"});
@@ -156,7 +161,10 @@ contract("REALCrowdsale", function(accounts) {
         assert.equal(balanceDevs.toNumber(), totalSupply.mul(0.20).toNumber());
 
         const balanceSecondary = await real.balanceOf(multisigReserve.address);
-        assert.equal(balanceSecondary.toNumber(), totalSupply.mul(0.29).toNumber());
+        assert.equal(balanceSecondary.toNumber(), totalSupply.mul(0.15).toNumber());
+
+        const balanceThird = await real.balanceOf(multisigBounties.address);
+        assert.equal(balanceThird.toNumber(), totalSupply.mul(0.14).toNumber());
     });
 
     it("Moves the Ether to the final multisig", async function() {
@@ -181,18 +189,15 @@ contract("REALCrowdsale", function(accounts) {
     });
 
     /*it("Allows transfers after 1 week period", async function() {
-        const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;
-        await realPlaceHolder.setMockedTime(t);
+     const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;
+     await realPlaceHolder.setMockedTime(t);
 
-        const balance = await real.balanceOf(addressReal);
-        console.log(web3.fromWei(balance).toNumber());
+     await real.transfer(accounts[5], web3.toWei(250));
 
-        await real.transfer(accounts[5], web3.toWei(250));
+     const balance2 = await real.balanceOf(accounts[5]);
 
-        const balance2 = await real.balanceOf(accounts[5]);
-
-        assert.equal(web3.fromWei(balance2).toNumber(), 250);
-    });*/
+     assert.equal(web3.fromWei(balance2).toNumber(), 250);
+     });*/
 
     it("Disallows devs from transfering before 6 months have past", async function() {
         const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;

@@ -14,6 +14,7 @@ contract("REALCrowdsale", function(accounts) {
     const addressReal = accounts[0];
     const addressCommunity = accounts[1];
     const addressReserve = accounts[2];
+    const addressBounties = accounts[9];
     const addressDevs = accounts[3];
     const addressREALHolder = accounts[4];
     const addressTest1 = accounts[5];
@@ -25,6 +26,7 @@ contract("REALCrowdsale", function(accounts) {
     let multisigReal;
     let multisigCommunity;
     let multisigReserve;
+    let multisigBounties;
     let multisigDevs;
     let miniMeTokenFactory;
     let real;
@@ -42,6 +44,7 @@ contract("REALCrowdsale", function(accounts) {
         multisigReal = await MultiSigWallet.new([addressReal], 1);
         multisigCommunity = await MultiSigWallet.new([addressCommunity], 1);
         multisigReserve = await MultiSigWallet.new([addressReserve], 1);
+        multisigBounties = await MultiSigWallet.new([addressBounties], 1);
         multisigDevs = await MultiSigWallet.new([addressDevs], 1);
 
         miniMeTokenFactory = await MiniMeTokenFactory.new();
@@ -76,7 +79,8 @@ contract("REALCrowdsale", function(accounts) {
             contributionWallet.address,
 
             multisigReserve.address,
-            devTokensHolder.address);
+            devTokensHolder.address,
+            multisigBounties.address);
     });
 
     it("Checks initial parameters", async function() {

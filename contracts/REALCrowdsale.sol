@@ -60,6 +60,7 @@ contract REALCrowdsale is Owned, TokenController {
 
     address public destTokensTeam;
     address public destTokensReserve;
+    address public destTokensBounties;
 
     address public realController;
 
@@ -115,7 +116,8 @@ contract REALCrowdsale is Owned, TokenController {
         uint256 _endBlock,
         address _destEthTeam,
         address _destTokensReserve,
-        address _destTokensTeam
+        address _destTokensTeam,
+        address _destTokensBounties
     ) public onlyOwner {
         // Initialize only once
         require(address(REAL) == 0x0);
@@ -141,6 +143,9 @@ contract REALCrowdsale is Owned, TokenController {
 
         require(_destTokensTeam != 0x0);
         destTokensTeam = _destTokensTeam;
+
+        require(_destTokensBounties != 0x0);
+        destTokensBounties = _destTokensBounties;
     }
 
     /// @notice Sets the limit for a guaranteed address. All the guaranteed addresses
@@ -353,7 +358,9 @@ contract REALCrowdsale is Owned, TokenController {
 
         uint256 percentageToContributors = percent(51);
 
-        uint256 percentageToReserve = percent(29);
+        uint256 percentageToReserve = percent(15);
+
+        uint256 percentageToBounties = percent(14);
 
 
         // REAL.totalSupply() -> Tokens minted during the contribution
@@ -375,6 +382,15 @@ contract REALCrowdsale is Owned, TokenController {
         //
         uint256 totalTokens = REAL.totalSupply().mul(percent(100)).div(percentageToContributors);
 
+
+        //
+        //                    percentageToBounties
+        //  bountiesTokens = ----------------------- * totalTokens
+        //                      percentage(100)
+        //
+        assert(REAL.generateTokens(
+            destTokensBounties,
+            totalTokens.mul(percentageToBounties).div(percent(100))));
 
         //
         //                    percentageToReserve

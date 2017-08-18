@@ -10,21 +10,21 @@ const REALPlaceHolder = artifacts.require("REALPlaceHolder");
 // All of these constants need to be configured before deploy
 const addressOwner = "0x8a838b1722750ba185f189092833791adb98955f";
 const addressesReal = [
-    "0x5f61a7da478e982bbd147201380c089e34543ab4",
+    "0x5f61a7da478e982bbd147201380c089e34543ab4"
 ];
-const multisigRealReqs = 1
+const multisigRealReqs = 1;
 const addressesCommunity = [
     "0x790d74d4a69a526b6c30401eca367dad499455dd",
 ];
-const multisigCommunityReqs = 1
+const multisigCommunityReqs = 1;
 const addressesReserve = [
     "0x4522a965f4c12683a8ccaf2f43446a5e97c0364a",
 ];
-const multisigReserveReqs = 1
+const multisigReserveReqs = 1;
 const addressesDevs = [
     "0x60971b70bef61aab41af496ed35e2e23ec8ff9ba",
 ];
-const multisigDevsReqs = 1
+const multisigDevsReqs = 1;
 
 const startBlock = 3800000;
 const endBlock = 3900000;
