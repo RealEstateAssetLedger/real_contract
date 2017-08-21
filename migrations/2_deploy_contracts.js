@@ -35,7 +35,7 @@ const endBlock = 3900000;
 
 
 module.exports = async function(deployer, network, accounts) {
-    // if (network === "development") return;  // Don't deploy on tests
+    if (network === "development") return;  // Don't deploy on tests
 
     // MultiSigWallet send
     let multisigRealFuture = MultiSigWallet.new(addressesReal, multisigRealReqs);
@@ -55,7 +55,7 @@ module.exports = async function(deployer, network, accounts) {
     console.log("MultiSigWallet Reserve: " + multisigReserve.address);
     let multisigDevs = await multisigDevsFuture;
     console.log("MultiSigWallet Devs: " + multisigDevs.address);
-    let multisigBounties = await multisigDevsFuture;
+    let multisigBounties = await multisigBountiesFuture;
     console.log("MultiSigWallet Bounties: " + multisigBounties.address);
     // MiniMeTokenFactory wait
     let miniMeTokenFactory = await miniMeTokenFactoryFuture;
