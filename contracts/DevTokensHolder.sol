@@ -1,10 +1,21 @@
 pragma solidity ^0.4.11;
 
-import "./Owned.sol";
-import "./ERC20Token.sol";
-import "./SafeMath.sol";
-import "./REALCrowdsale.sol";
+/*
+    Copyright 2017, Jordi Baylina
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /// @title DevTokensHolder Contract
 /// @author Jordi Baylina
@@ -31,37 +42,35 @@ import "./REALCrowdsale.sol";
 //       End
 
 
+import "./MiniMeToken.sol";
+import "./REALCrowdsale.sol";
+import "./SafeMath.sol";
+import "./ERC20Token.sol";
+
 
 contract DevTokensHolder is Owned {
     using SafeMath for uint256;
 
     uint256 collectedTokens;
-    REALCrowdsale crowdsale;
+    REALCrowdsale contribution;
     MiniMeToken real;
 
-    function DevTokensHolder(address _owner, address _crowdsale, address _real) {
+    function DevTokensHolder(address _owner, address _contribution, address _real) {
         owner = _owner;
-        crowdsale = REALCrowdsale(_crowdsale);
+        contribution = REALCrowdsale(_contribution);
         real = MiniMeToken(_real);
     }
-
 
     /// @notice The Dev (Owner) will call this method to extract the tokens
     function collectTokens() public onlyOwner {
         uint256 balance = real.balanceOf(address(this));
         uint256 total = collectedTokens.add(balance);
 
-        uint256 finalizedTime = crowdsale.finalizedTime();
-
-        Message("Required time");
+        uint256 finalizedTime = contribution.finalizedTime();
 
         require(finalizedTime > 0 && getTime() > finalizedTime.add(months(6)));
 
-        Message("Passed require");
-
         uint256 canExtract = total.mul(getTime().sub(finalizedTime)).div(months(24));
-
-        Message("Can extract");
 
         canExtract = canExtract.sub(collectedTokens);
 
@@ -107,5 +116,4 @@ contract DevTokensHolder is Owned {
 
     event ClaimedTokens(address indexed _token, address indexed _controller, uint256 _amount);
     event TokensWithdrawn(address indexed _holder, uint256 _amount);
-    event Message(bytes message);
 }

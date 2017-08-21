@@ -70,7 +70,7 @@ contract REALPlaceHolder is TokenController, Owned {
     }
 
     function onTransfer(address _from, address, uint256) public returns (bool) {
-        return transferable(_from);
+      return transferable(_from);
     }
 
     function onApprove(address _from, address, uint256) public returns (bool) {
@@ -87,7 +87,7 @@ contract REALPlaceHolder is TokenController, Owned {
                 return false;
             }
         }
-        return (getTime() > activationTime) && (_from == owner);
+        return (getTime() > activationTime) || (_from == owner);
     }
 
 
@@ -126,4 +126,5 @@ contract REALPlaceHolder is TokenController, Owned {
 
     event ClaimedTokens(address indexed _token, address indexed _controller, uint256 _amount);
     event ControllerChanged(address indexed _newController);
+    event MessageBool(bool _message);
 }

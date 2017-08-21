@@ -38,7 +38,7 @@ contract("REALCrowdsale", function(accounts) {
     const startBlock = 1000000;
     const endBlock = 1040000;
 
-    it("Deploys all contracts", async function() { // PASS
+    it("Deploys all contracts", async function() {
         multisigReal = await MultiSigWallet.new([addressReal], 1);
         multisigCommunity = await MultiSigWallet.new([addressCommunity], 1);
         multisigReserve = await MultiSigWallet.new([addressReserve], 1);
@@ -188,7 +188,7 @@ contract("REALCrowdsale", function(accounts) {
         });
     });
 
-    /*it("Allows transfers after 1 week period", async function() {
+    it("Allows transfers after 1 week period", async function() {
      const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;
      await realPlaceHolder.setMockedTime(t);
 
@@ -197,7 +197,7 @@ contract("REALCrowdsale", function(accounts) {
      const balance2 = await real.balanceOf(accounts[5]);
 
      assert.equal(web3.fromWei(balance2).toNumber(), 250);
-   });*/
+   });
 
     it("Disallows devs from transfering before 6 months have past", async function() {
         const t = Math.floor(new Date().getTime() / 1000) + (86400 * 7) + 1000;
@@ -214,11 +214,13 @@ contract("REALCrowdsale", function(accounts) {
         assert.equal(balance,0);
     });
 
-    /*it("Allows devs to extract after 6 months", async function() {
-      const t = (await realCrowdsale.finalizedTime()).toNumber() + (86400 * 185);
+    it("Allows devs to extract after 6 months", async function() {
+      const t = (await realCrowdsale.finalizedTime()).toNumber() + (86400 * 360);
       await devTokensHolder.setMockedTime(t);
 
       const totalSupply = await real.totalSupply();
+      const balanceDevs = await real.balanceOf(devTokensHolder.address);
+      assert.equal(balanceDevs.toNumber(), totalSupply.mul(0.20).toNumber());
 
       await multisigDevs.submitTransaction(
           devTokensHolder.address,
@@ -252,7 +254,7 @@ contract("REALCrowdsale", function(accounts) {
       const realTokens = web3.fromWei(balance).toNumber();
 
       assert.equal(calcTokens, realTokens);
-    });*/
+    });
 
     it("Checks that REAL's Controller is upgradeable", async function() {
         await multisigCommunity.submitTransaction(
