@@ -25,19 +25,24 @@ const addressesDevs = [
     "0x60971b70bef61aab41af496ed35e2e23ec8ff9ba",
 ];
 const multisigDevsReqs = 1;
+const addressesBounties = [
+    "0x8a838b1722750ba185f189092833791adb98955f",
+];
+const multisigBountiesReqs = 1;
 
 const startBlock = 3800000;
 const endBlock = 3900000;
 
 
 module.exports = async function(deployer, network, accounts) {
-    if (network === "development") return;  // Don't deploy on tests
+    // if (network === "development") return;  // Don't deploy on tests
 
     // MultiSigWallet send
     let multisigRealFuture = MultiSigWallet.new(addressesReal, multisigRealReqs);
     let multisigCommunityFuture = MultiSigWallet.new(addressesCommunity, multisigCommunityReqs);
     let multisigReserveFuture = MultiSigWallet.new(addressesReserve, multisigReserveReqs);
     let multisigDevsFuture = MultiSigWallet.new(addressesDevs, multisigDevsReqs);
+    let multisigBountiesFuture = MultiSigWallet.new(addressesBounties, multisigBountiesReqs);
     // MiniMeTokenFactory send
     let miniMeTokenFactoryFuture = MiniMeTokenFactory.new();
 
@@ -50,6 +55,8 @@ module.exports = async function(deployer, network, accounts) {
     console.log("MultiSigWallet Reserve: " + multisigReserve.address);
     let multisigDevs = await multisigDevsFuture;
     console.log("MultiSigWallet Devs: " + multisigDevs.address);
+    let multisigBounties = await multisigDevsFuture;
+    console.log("MultiSigWallet Bounties: " + multisigBounties.address);
     // MiniMeTokenFactory wait
     let miniMeTokenFactory = await miniMeTokenFactoryFuture;
     console.log("MiniMeTokenFactory: " + miniMeTokenFactory.address);
@@ -114,6 +121,7 @@ module.exports = async function(deployer, network, accounts) {
         contributionWallet.address,
 
         multisigReserve.address,
-        devTokensHolder.address);
+        devTokensHolder.address,
+        multisigBounties.address);
     console.log("REAL Crowdsale initialized initialized!");
 };
