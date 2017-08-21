@@ -36,20 +36,20 @@ import "./ERC20Token.sol";
 contract REALCrowdsale is Owned, TokenController {
     using SafeMath for uint256;
 
-    uint256 constant public fundingLimit = 200000 ether;
-    uint256 constant public failSafeLimit = 400000 ether;
+    uint256 constant public fundingLimit = 100000 ether;
+    uint256 constant public failSafeLimit = 200000 ether;
     uint256 constant public maxGuaranteedLimit = 30000 ether;
     uint256 constant public exchangeRate = 220;
     uint256 constant public maxGasPrice = 50000000000;
     uint256 constant public maxCallFrequency = 100;
 
-    uint256 constant public bonus1cap = 40000 ether;
+    uint256 constant public bonus1cap = 25000 ether;
     uint256 constant public bonus1 = 25;
-    uint256 constant public bonus2cap = 80000 ether;
+    uint256 constant public bonus2cap = 50000 ether;
     uint256 constant public bonus2 = 15;
-    uint256 constant public bonus3cap = 120000 ether;
+    uint256 constant public bonus3cap = 100000 ether;
     uint256 constant public bonus3 = 10;
-    uint256 constant public bonus4cap = 160000 ether;
+    uint256 constant public bonus4cap = 150000 ether;
     uint256 constant public bonus4 = 5;
 
     MiniMeToken public REAL;
@@ -212,7 +212,7 @@ contract REALCrowdsale is Owned, TokenController {
         require(getBlockNumber().sub(lastCallBlock[caller]) >= maxCallFrequency);
         lastCallBlock[caller] = getBlockNumber();
 
-        uint256 toCollect = fundingLimit - totalNormalCollected;
+        uint256 toCollect = failSafeLimit - totalNormalCollected; //This was fundingLimit - totalNormalCollected
 
         uint256 toFund;
         if (msg.value <= toCollect) {
@@ -246,6 +246,7 @@ contract REALCrowdsale is Owned, TokenController {
 
         uint256 collected = totalCollected();
         collected = collected.sub(_toFund);
+        /*LogQuantity(collected.div(10**18), "Current collected");*/
 
         if (_toFund > 0) {
             uint256 tokensGenerated = _toFund.mul(exchangeRate);
@@ -254,49 +255,69 @@ contract REALCrowdsale is Owned, TokenController {
             uint256 tokensToAdd = 0;
             uint256 bonusTokens = 0;
 
+            /*LogQuantity(_toFund.div(10**18), "To fund");
+            LogQuantity(tokensGenerated.div(10**18), "Tokens generated");*/
+
             if(_guaranteed) {
               tokensToAdd = tokensGenerated.percent(bonus1);
               tokensGenerated = tokensGenerated + tokensToAdd;
             } else if (collected < bonus1cap) {
               if (collected.add(_toFund) < bonus1cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus1));
-
+                /*LogQuantity(tokensGenerated.div(10**18), "Tokens generated plus percentage cap 1");*/
               } else {
                 bonusTokens = bonus1cap.sub(collected).percent(bonus1).mul(exchangeRate);
+                /*LogQuantity(bonusTokens.div(10**18), "bonus cap 1");*/
                 tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                /*LogQuantity(tokensToBonusCap.div(10**18), "tokens until cap 1");*/
                 tokensToNextBonusCap = collected.add(_toFund).sub(bonus1cap).percent(bonus2).mul(exchangeRate);
+                /*LogQuantity(tokensToNextBonusCap.div(10**18), "tokens for cap 2");*/
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+                /*LogQuantity(tokensGenerated.div(10**18), "Final tokens generated");*/
 
               }
             } else if (collected < bonus2cap) {
               if (collected.add(_toFund) < bonus2cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus2));
+                /*LogQuantity(tokensGenerated.div(10**18), "Tokens generated plus percentage cap 2");*/
 
               } else {
                 bonusTokens = bonus2cap.sub(collected).percent(bonus2).mul(exchangeRate);
+                /*LogQuantity(bonusTokens.div(10**18), "bonus cap 2");*/
                 tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                /*LogQuantity(tokensToBonusCap.div(10**18), "tokens until cap 2");*/
                 tokensToNextBonusCap = collected.add(_toFund).sub(bonus2cap).percent(bonus3).mul(exchangeRate);
+                /*LogQuantity(tokensToNextBonusCap.div(10**18), "tokens for cap 3");*/
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+                /*LogQuantity(tokensGenerated.div(10**18), "Final tokens generated");*/
 
               }
             } else if (collected < bonus3cap) {
               if (collected.add(_toFund) < bonus3cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus3));
+                /*LogQuantity(tokensGenerated.div(10**18), "Tokens generated plus percentage cap 3");*/
 
               } else {
                 bonusTokens = bonus3cap.sub(collected).percent(bonus3).mul(exchangeRate);
+                /*LogQuantity(bonusTokens.div(10**18), "bonus cap 3");*/
                 tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                /*LogQuantity(tokensToBonusCap.div(10**18), "tokens until cap 3");*/
                 tokensToNextBonusCap = collected.add(_toFund).sub(bonus3cap).percent(bonus4).mul(exchangeRate);
+                /*LogQuantity(tokensToNextBonusCap.div(10**18), "tokens for cap 4");*/
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+                /*LogQuantity(tokensGenerated.div(10**18), "Final tokens generated");*/
 
               }
             } else if (collected < bonus4cap) {
               if (collected.add(_toFund) < bonus4cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus4));
+                /*LogQuantity(tokensGenerated.div(10**18), "Tokens generated plus percentage cap 4");*/
 
               } else {
                 bonusTokens = bonus4cap.sub(collected).percent(bonus4).mul(exchangeRate);
+                /*LogQuantity(bonusTokens.div(10**18), "bonus cap 4");*/
                 tokensGenerated = tokensGenerated.add(bonusTokens);
+                /*LogQuantity(tokensGenerated.div(10**18), "tokens until cap 4");*/
               }
             }
 
