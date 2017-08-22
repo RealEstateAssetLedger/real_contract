@@ -6,6 +6,7 @@ const REAL = artifacts.require("REALMock");
 const RealCrowdsaleClass = artifacts.require("REALCrowdsaleMock");
 const ContributionWallet = artifacts.require("ContributionWallet");
 const DevTokensHolder = artifacts.require("DevTokensHolderMock");
+const ReserveTokensHolder = artifacts.require("ReserveTokensHolderMock");
 const REALPlaceHolderClass = artifacts.require("REALPlaceHolderMock");
 
 const assertFail = require("./helpers/assertFail");
@@ -31,6 +32,7 @@ contract("REALCrowdsale", function(accounts) {
     let realCrowdsale;
     let contributionWallet;
     let devTokensHolder;
+    let reserveTokensHolder;
     let realPlaceHolder;
 
     var cur = 0;
@@ -55,8 +57,14 @@ contract("REALCrowdsale", function(accounts) {
             multisigReal.address,
             endBlock,
             realCrowdsale.address);
+
         devTokensHolder = await DevTokensHolder.new(
             multisigDevs.address,
+            realCrowdsale.address,
+            real.address);
+
+        reserveTokensHolder = await DevTokensHolder.new(
+            multisigReserve.address,
             realCrowdsale.address,
             real.address);
 
@@ -76,7 +84,7 @@ contract("REALCrowdsale", function(accounts) {
 
             contributionWallet.address,
 
-            multisigReserve.address,
+            reserveTokensHolder.address,
             devTokensHolder.address,
             multisigBounties.address);
     });
@@ -158,13 +166,13 @@ contract("REALCrowdsale", function(accounts) {
         assert.isBelow(web3.fromWei(totalSupply).toNumber() - (400000 / 0.51), 0.01);
 
         const balanceDevs = await real.balanceOf(devTokensHolder.address);
-        assert.equal(balanceDevs.toNumber(), totalSupply.mul(0.20).toNumber());
+        assert.equal(balanceDevs.toNumber(), totalSupply.mul(0.20).toNumber(), 'devs');
 
-        const balanceSecondary = await real.balanceOf(multisigReserve.address);
-        assert.equal(balanceSecondary.toNumber(), totalSupply.mul(0.15).toNumber());
+        const balanceSecondary = await real.balanceOf(reserveTokensHolder.address);
+        assert.equal(balanceSecondary.toNumber(), totalSupply.mul(0.15).toNumber(), 'reserve');
 
         const balanceThird = await real.balanceOf(multisigBounties.address);
-        assert.equal(balanceThird.toNumber(), totalSupply.mul(0.14).toNumber());
+        assert.equal(balanceThird.toNumber(), totalSupply.mul(0.14).toNumber(), 'bounties');
     });
 
     it("Moves the Ether to the final multisig", async function() {
@@ -255,6 +263,26 @@ contract("REALCrowdsale", function(accounts) {
 
       assert.equal(calcTokens, realTokens);
     });
+
+    // it("Allows devs to extract everything from reserve after 12 months", async function() {
+    //     const t = Math.floor(new Date().getTime() / 1000) + (86400 * 360);
+    //     await reserveTokensHolder.setMockedTime(t);
+    //     console.log(t)
+    //     const totalSupply = await real.totalSupply();
+    //
+    //     await multisigReserve.submitTransaction(
+    //         reserveTokensHolder.address,
+    //         0,
+    //         reserveTokensHolder.contract.collectTokens.getData(),
+    //         {from: addressReserve});
+    //
+    //     const balance = await real.balanceOf(reserveTokensHolder.address);
+    //
+    //     const calcTokens = web3.fromWei(totalSupply.mul(0.15)).toNumber();
+    //     const realTokens = web3.fromWei(balance).toNumber();
+    //
+    //     assert.equal(calcTokens, realTokens);
+    // });
 
     it("Checks that REAL's Controller is upgradeable", async function() {
         await multisigCommunity.submitTransaction(
