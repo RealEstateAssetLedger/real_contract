@@ -6,7 +6,7 @@ import '../ReserveTokensHolder.sol';
 
 contract ReserveTokensHolderMock is ReserveTokensHolder {
 
-    function ReserveTokensHolderMock(address _owner, address _crowdsale, address _real) ReserveTokensHolderMock(_owner, _crowdsale, _real) {}
+    function ReserveTokensHolderMock(address _owner, address _crowdsale, address _real) ReserveTokensHolder(_owner, _crowdsale, _real) {}
 
     function getTime() internal returns (uint256) {
         return mock_date;

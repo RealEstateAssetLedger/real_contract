@@ -6,7 +6,7 @@ const REAL = artifacts.require("REALMock");
 const RealCrowdsaleClass = artifacts.require("REALCrowdsaleMock");
 const ContributionWallet = artifacts.require("ContributionWallet");
 const DevTokensHolder = artifacts.require("DevTokensHolderMock");
-const ReserveTokensHolder = artifacts.require("ReserveTokensHolderMock");
+const ResTokensHolder = artifacts.require("ReserveTokensHolderMock");
 const REALPlaceHolderClass = artifacts.require("REALPlaceHolderMock");
 
 const assertFail = require("./helpers/assertFail");
@@ -63,7 +63,7 @@ contract("REALCrowdsale", function(accounts) {
             realCrowdsale.address,
             real.address);
 
-        reserveTokensHolder = await DevTokensHolder.new(
+        reserveTokensHolder = await ResTokensHolder.new(
             multisigReserve.address,
             realCrowdsale.address,
             real.address);
@@ -222,6 +222,22 @@ contract("REALCrowdsale", function(accounts) {
         assert.equal(balance,0);
     });
 
+    it("Disallows devs to extract from reserve before 12 months have past", async function() {
+        const t = Math.floor(new Date().getTime() / 1000) + (86400 * 100);
+        await reserveTokensHolder.setMockedDate(t);
+        const totalSupply = await real.totalSupply();
+
+        await multisigReserve.submitTransaction(
+            reserveTokensHolder.address,
+            0,
+            reserveTokensHolder.contract.collectTokens.getData(),
+            {from: addressReserve, gas: 1000000});
+
+        const balance = await real.balanceOf(multisigReserve.address);
+
+        assert.equal(balance, 0);
+    });
+
     it("Allows devs to extract after 6 months", async function() {
       const t = (await realCrowdsale.finalizedTime()).toNumber() + (86400 * 360);
       await devTokensHolder.setMockedTime(t);
@@ -264,25 +280,26 @@ contract("REALCrowdsale", function(accounts) {
       assert.equal(calcTokens, realTokens);
     });
 
-    // it("Allows devs to extract everything from reserve after 12 months", async function() {
-    //     const t = Math.floor(new Date().getTime() / 1000) + (86400 * 360);
-    //     await reserveTokensHolder.setMockedTime(t);
-    //     console.log(t)
-    //     const totalSupply = await real.totalSupply();
-    //
-    //     await multisigReserve.submitTransaction(
-    //         reserveTokensHolder.address,
-    //         0,
-    //         reserveTokensHolder.contract.collectTokens.getData(),
-    //         {from: addressReserve});
-    //
-    //     const balance = await real.balanceOf(reserveTokensHolder.address);
-    //
-    //     const calcTokens = web3.fromWei(totalSupply.mul(0.15)).toNumber();
-    //     const realTokens = web3.fromWei(balance).toNumber();
-    //
-    //     assert.equal(calcTokens, realTokens);
-    // });
+    it("Allows devs to extract everything from reserve after 12 months", async function() {
+        const t = Math.floor(new Date().getTime() / 1000) + (86400 * 370);
+        await reserveTokensHolder.setMockedDate(t);
+        const totalSupply = await real.totalSupply();
+
+        await multisigReserve.submitTransaction(
+            reserveTokensHolder.address,
+            0,
+            reserveTokensHolder.contract.collectTokens.getData(),
+            {from: addressReserve});
+
+        const balance = await real.balanceOf(multisigReserve.address);
+        const balanceReserve = await real.balanceOf(reserveTokensHolder.address);
+
+        const calcTokens = web3.fromWei(totalSupply.mul(0.15)).toNumber();
+        const realTokens = web3.fromWei(balance).toNumber();
+
+        assert.equal(calcTokens, realTokens);
+        assert.equal(balanceReserve, 0);
+    });
 
     it("Checks that REAL's Controller is upgradeable", async function() {
         await multisigCommunity.submitTransaction(

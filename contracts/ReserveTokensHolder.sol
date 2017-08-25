@@ -63,25 +63,16 @@ contract ReserveTokensHolder is Owned {
 
     /// @notice The Dev (Owner) will call this method to extract the tokens
     function collectTokens() public onlyOwner {
-        uint256 balance = real.balanceOf(address(this));
-        uint256 total = collectedTokens.add(balance);
-
         uint256 finalizedTime = contribution.finalizedTime();
 
-        require(finalizedTime > 0 && getTime() > finalizedTime.add(months(6)));
+        require(collectedTokens == 0 && finalizedTime > 0 && getTime() > finalizedTime.add(months(12)));
 
-        uint256 canExtract = total.mul(getTime().sub(finalizedTime)).div(months(24));
+        uint256 balance = real.balanceOf(address(this));
 
-        canExtract = canExtract.sub(collectedTokens);
+        collectedTokens = balance;
+        assert(real.transfer(owner, balance));
 
-        if (canExtract > balance) {
-            canExtract = balance;
-        }
-
-        collectedTokens = collectedTokens.add(canExtract);
-        assert(real.transfer(owner, canExtract));
-
-        TokensWithdrawn(owner, canExtract);
+        TokensWithdrawn(owner, balance);
     }
 
     function months(uint256 m) internal returns (uint256) {
