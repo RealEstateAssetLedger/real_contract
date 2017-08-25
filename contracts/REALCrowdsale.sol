@@ -442,15 +442,17 @@ contract REALCrowdsale is Owned, TokenController {
     }
 
     /// @dev Internal function to determine if an address is a contract
-    /// @param _addr The address being queried
-    /// @return True if `_addr` is a contract
-    function isContract(address _addr) constant internal returns (bool) {
-        if (_addr == 0) return false;
+    /// @param _sender the sender address
+    /// @return True if tx.origin is not the sender (so smart contract involved)
+    function isContract(address _sender) constant internal returns (bool) {
+        return tx.origin != _sender;
+        /*if (_addr == 0) return false;
         uint256 size;
         assembly {
             size := extcodesize(_addr)
         }
-        return (size > 0);
+        return (size > 0);*/
+
     }
 
 
