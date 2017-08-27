@@ -126,7 +126,7 @@ contract("REALCrowdsale", function(accounts) {
       //console.log(web3.fromWei(currentTotalCollected).toNumber());
       assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 25050);
       balanceTest1 = await real.balanceOf(addressTest1);
-      assert.equal(web3.fromWei(balanceTest1).toNumber(), (1*220*1.25)+(50*220*1.25)+(50*220*1.15));
+      assert.equal(web3.fromWei(balanceTest1).toNumber(), (1*220*1.25)+(50*220*1.25)+(50*220*1.20));
 
       await real.sendTransaction({value: web3.toWei(250), gas: 300000, from: addressTestDummy}); //25300
       await realCrowdsale.setMockedBlockNumber(1002000);
@@ -137,7 +137,7 @@ contract("REALCrowdsale", function(accounts) {
 
       await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest2}); //25310
       var balanceTest2 = await real.balanceOf(addressTest2);
-      assert.equal(web3.fromWei(balanceTest2).toNumber(), 10*220*1.15);
+      assert.equal(web3.fromWei(balanceTest2).toNumber(), 10*220*1.20);
       currentTotalCollected = await realCrowdsale.totalCollected();
       //console.log(web3.fromWei(currentTotalCollected).toNumber());
       assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 25310);
@@ -152,7 +152,7 @@ contract("REALCrowdsale", function(accounts) {
 
       await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest2}); //50050
       balanceTest2 = await real.balanceOf(addressTest2);
-      assert.equal(web3.fromWei(balanceTest2).toNumber(), 10*220*1.15+(50*220*1.15)+(50*220*1.10));
+      assert.equal(web3.fromWei(balanceTest2).toNumber(), 10*220*1.20+(50*220*1.20)+(50*220*1.15));
       currentTotalCollected = await realCrowdsale.totalCollected();
       //console.log(web3.fromWei(currentTotalCollected).toNumber());
       assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 50050);
@@ -166,7 +166,7 @@ contract("REALCrowdsale", function(accounts) {
 
       await real.sendTransaction({value: web3.toWei(10), gas: 300000, from: addressTest3}); //50310
       var balanceTest3 = await real.balanceOf(addressTest3);
-      assert.equal(web3.fromWei(balanceTest3).toNumber(), 10*220*1.10);
+      assert.equal(web3.fromWei(balanceTest3).toNumber(), 10*220*1.15);
       currentTotalCollected = await realCrowdsale.totalCollected();
       //console.log(web3.fromWei(currentTotalCollected).toNumber());
       assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 50310);
@@ -180,7 +180,7 @@ contract("REALCrowdsale", function(accounts) {
 
       await real.sendTransaction({value: web3.toWei(100), gas: 300000, from: addressTest3}); //100050
       balanceTest3 = await real.balanceOf(addressTest3);
-      assert.equal(web3.fromWei(balanceTest3).toNumber(), 10*220*1.10+(50*220*1.10)+(50*220*1.05));
+      assert.equal(web3.fromWei(balanceTest3).toNumber(), 10*220*1.15+(50*220*1.15)+(50*220*1.05));
       currentTotalCollected = await realCrowdsale.totalCollected();
       //console.log(web3.fromWei(currentTotalCollected).toNumber());
       assert.equal(web3.fromWei(currentTotalCollected).toNumber(), 100050);

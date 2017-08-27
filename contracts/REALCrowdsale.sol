@@ -46,9 +46,9 @@ contract REALCrowdsale is Owned, TokenController {
     uint256 constant public bonus1cap = 25000 ether;
     uint256 constant public bonus1 = 25;
     uint256 constant public bonus2cap = 50000 ether;
-    uint256 constant public bonus2 = 15;
+    uint256 constant public bonus2 = 20;
     uint256 constant public bonus3cap = 100000 ether;
-    uint256 constant public bonus3 = 10;
+    uint256 constant public bonus3 = 15;
     uint256 constant public bonus4cap = 150000 ether;
     uint256 constant public bonus4 = 5;
 
