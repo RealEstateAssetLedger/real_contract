@@ -47,7 +47,7 @@ const endBlock = 1568000;
 
 
 module.exports = async function(deployer, network, accounts) {
-    // if (network === "development") return;  // Don't deploy on tests
+    if (network === "development") return;  // Don't deploy on tests
 
     // MultiSigWallet send
     let multisigCommunityFuture = MultiSigWallet.new(addressesCommunity, multisigCommunityReqs);

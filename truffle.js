@@ -7,12 +7,12 @@ const providerKovan = new HDWalletProvider(mnemonic, 'https://kovan.infura.io', 
 module.exports = {
     networks: {
         development: {
-            network_id: 3,
+            network_id: 15,
             host: "localhost",
             port: 8545,
-            // gas: 4000000,
-            // gasPrice: 20e9,
-            from: '0x004B8b840DE404B607d6548b98c711Ac818D750e',
+            gas: 4000000,
+            gasPrice: 20e9,
+            from: '0x8a838b1722750ba185f189092833791adb98955f',
         },
         development_migrate: {
             network_id: 15,
@@ -32,10 +32,11 @@ module.exports = {
         },
         ropsten: {
             network_id: 3,
-            provider: providerRopsten,
+            host: "localhost",
+            port: 8545,
+            // gas: 4000000,
+            // gasPrice: 20e9,
             from: '0x004B8b840DE404B607d6548b98c711Ac818D750e',
-            gas: 4000000,
-            gasPrice: 20e9,
         },
         kovan: {
             network_id: 42,
