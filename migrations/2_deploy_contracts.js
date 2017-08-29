@@ -41,7 +41,7 @@ const endBlock = 1568000;
 
 
 module.exports = async function(deployer, network, accounts) {
-    if (network === "development") return;  // Don't deploy on tests
+    // if (network === "development") return;  // Don't deploy on tests
 
     // MultiSigWallet send
     let multisigReserveFuture = MultiSigWallet.new(addressesReserve, multisigReserveReqs);
@@ -81,11 +81,11 @@ module.exports = async function(deployer, network, accounts) {
 
     // REAL changeController send
     let realChangeControllerFuture = real.changeController(realCrowdsale.address);
-    // ContributionWallet send
-    let contributionWalletFuture = ContributionWallet.new(
-        addressBitcoinSuisse,
-        endBlock,
-        realCrowdsale.address);
+    // // ContributionWallet send
+    // let contributionWalletFuture = ContributionWallet.new(
+    //     addressBitcoinSuisse,
+    //     endBlock,
+    //     realCrowdsale.address);
     // DevTokensHolder send
     let devTokensHolderFuture = DevTokensHolder.new(
         multisigDevs.address,
@@ -96,9 +96,9 @@ module.exports = async function(deployer, network, accounts) {
         multisigReserve.address,
         realCrowdsale.address);
 
-    // ContributionWallet wait
-    let contributionWallet = await contributionWalletFuture;
-    console.log("ContributionWallet: " + contributionWallet.address);
+    // // ContributionWallet wait
+    // let contributionWallet = await contributionWalletFuture;
+    // console.log("ContributionWallet: " + contributionWallet.address);
     // DevTokensHolder wait
     let devTokensHolder = await devTokensHolderFuture;
     console.log("DevTokensHolder: " + devTokensHolder.address);
@@ -127,7 +127,7 @@ module.exports = async function(deployer, network, accounts) {
         startBlock,
         endBlock,
 
-        contributionWallet.address,
+        addressBitcoinSuisse,
 
         reserveTokensHolder.address,
         devTokensHolder.address,
