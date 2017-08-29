@@ -69,6 +69,7 @@ contract REALCrowdsale is Owned, TokenController {
 
     uint256 public totalGuaranteedCollected;
     uint256 public totalNormalCollected;
+    uint256 public reservedGuaranteed;
 
     uint256 public finalizedBlock;
     uint256 public finalizedTime;
@@ -159,6 +160,7 @@ contract REALCrowdsale is Owned, TokenController {
         require(getBlockNumber() < startBlock);
         require(_limit > 0 && _limit <= maxGuaranteedLimit);
         guaranteedBuyersLimit[_th] = _limit;
+        reservedGuaranteed = reservedGuaranteed + _limit;
         GuaranteedAddress(_th, _limit);
     }
 
@@ -179,7 +181,9 @@ contract REALCrowdsale is Owned, TokenController {
     /// @param _th REAL holder where the REALs will be minted.
     function proxyPayment(address _th) public payable notPaused initialized contributionOpen returns (bool) {
         require(_th != 0x0);
-        if (guaranteedBuyersLimit[_th] > 0) {
+        uint256 guaranteedRemaining = guaranteedBuyersLimit[_th].sub(guaranteedBuyersBought[_th]);
+        /*LogGuaranteed(_th, guaranteedBuyersLimit[_th].div(10**18), guaranteedBuyersBought[_th].div(10**18), guaranteedRemaining.div(10**18), "  ");*/
+        if (guaranteedRemaining > 0) {
             buyGuaranteed(_th);
         } else {
             buyNormal(_th);
@@ -245,22 +249,37 @@ contract REALCrowdsale is Owned, TokenController {
         assert(totalCollected() <= failSafeLimit);
 
         uint256 collected = totalCollected();
+        uint256 totCollected = collected;
         collected = collected.sub(_toFund);
-        /*LogQuantity(collected.div(10**18), "Current collected");*/
 
         if (_toFund > 0) {
             uint256 tokensGenerated = _toFund.mul(exchangeRate);
             uint256 tokensToBonusCap = 0;
             uint256 tokensToNextBonusCap = 0;
-            uint256 tokensToAdd = 0;
             uint256 bonusTokens = 0;
 
-            /*LogQuantity(_toFund.div(10**18), "To fund");
-            LogQuantity(tokensGenerated.div(10**18), "Tokens generated");*/
-
+            //Guaranteed should be 25.000 plus some that could enter while we close the purchase, so we only control first and secon caps (second for the extra).
             if(_guaranteed) {
-              tokensToAdd = tokensGenerated.percent(bonus1);
-              tokensGenerated = tokensGenerated + tokensToAdd;
+              uint256 guaranteedCollected = totalGuaranteedCollected - _toFund;
+              if (guaranteedCollected < bonus1cap) {
+                if (totalGuaranteedCollected < bonus1cap) {
+                  tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus1));
+                } else {
+                  bonusTokens = bonus1cap.sub(guaranteedCollected).percent(bonus1).mul(exchangeRate);
+                  tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                  tokensToNextBonusCap = totalGuaranteedCollected.sub(bonus1cap).percent(bonus2).mul(exchangeRate);
+                  tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+                }
+              } else {
+                if (totalGuaranteedCollected < bonus2cap) {
+                  tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus2));
+                } else {
+                  bonusTokens = bonus2cap.sub(guaranteedCollected).percent(bonus2).mul(exchangeRate);
+                  tokensToBonusCap = tokensGenerated.add(bonusTokens);
+                  tokensToNextBonusCap = totalGuaranteedCollected.sub(bonus2cap).percent(bonus3).mul(exchangeRate);
+                  tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
+                }
+              }
             } else if (collected < bonus1cap) {
               if (collected.add(_toFund) < bonus1cap) {
                 tokensGenerated = tokensGenerated.add(tokensGenerated.percent(bonus1));
@@ -270,7 +289,7 @@ contract REALCrowdsale is Owned, TokenController {
                 /*LogQuantity(bonusTokens.div(10**18), "bonus cap 1");*/
                 tokensToBonusCap = tokensGenerated.add(bonusTokens);
                 /*LogQuantity(tokensToBonusCap.div(10**18), "tokens until cap 1");*/
-                tokensToNextBonusCap = collected.add(_toFund).sub(bonus1cap).percent(bonus2).mul(exchangeRate);
+                tokensToNextBonusCap = totCollected.sub(bonus1cap).percent(bonus2).mul(exchangeRate);
                 /*LogQuantity(tokensToNextBonusCap.div(10**18), "tokens for cap 2");*/
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
                 /*LogQuantity(tokensGenerated.div(10**18), "Final tokens generated");*/
@@ -286,7 +305,7 @@ contract REALCrowdsale is Owned, TokenController {
                 /*LogQuantity(bonusTokens.div(10**18), "bonus cap 2");*/
                 tokensToBonusCap = tokensGenerated.add(bonusTokens);
                 /*LogQuantity(tokensToBonusCap.div(10**18), "tokens until cap 2");*/
-                tokensToNextBonusCap = collected.add(_toFund).sub(bonus2cap).percent(bonus3).mul(exchangeRate);
+                tokensToNextBonusCap = totCollected.sub(bonus2cap).percent(bonus3).mul(exchangeRate);
                 /*LogQuantity(tokensToNextBonusCap.div(10**18), "tokens for cap 3");*/
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
                 /*LogQuantity(tokensGenerated.div(10**18), "Final tokens generated");*/
@@ -302,7 +321,7 @@ contract REALCrowdsale is Owned, TokenController {
                 /*LogQuantity(bonusTokens.div(10**18), "bonus cap 3");*/
                 tokensToBonusCap = tokensGenerated.add(bonusTokens);
                 /*LogQuantity(tokensToBonusCap.div(10**18), "tokens until cap 3");*/
-                tokensToNextBonusCap = collected.add(_toFund).sub(bonus3cap).percent(bonus4).mul(exchangeRate);
+                tokensToNextBonusCap = totCollected.sub(bonus3cap).percent(bonus4).mul(exchangeRate);
                 /*LogQuantity(tokensToNextBonusCap.div(10**18), "tokens for cap 4");*/
                 tokensGenerated = tokensToBonusCap.add(tokensToNextBonusCap);
                 /*LogQuantity(tokensGenerated.div(10**18), "Final tokens generated");*/
@@ -520,4 +539,5 @@ contract REALCrowdsale is Owned, TokenController {
     event GuaranteedAddress(address indexed _th, uint256 _limit);
     event Finalized();
     event LogQuantity(uint256 _amount, string _message);
+    event LogGuaranteed(address _address, uint256 _buyersLimit, uint256 _buyersBought, uint256 _buyersRemaining, string _message);
 }
