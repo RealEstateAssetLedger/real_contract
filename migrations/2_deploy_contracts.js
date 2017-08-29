@@ -9,7 +9,7 @@ const ReserveTokensHolder = artifacts.require("ReserveTokensHolder");
 
 
 // All of these constants need to be configured before deploy
-const addressBitcoinSuisse = "0x004B8b840DE404B607d6548b98c711Ac818D750e";
+const addressBitcoinSuisse = "0x0cBe5725623Bf337E9152309f6CbbAB10B4EfD5a";  //address test
 const addressMainOwner = "0x0581E7aF436e9380a8B772885A66Bd84F790939D";
 
 const addressesReserve = [
