@@ -10,17 +10,11 @@ const ReserveTokensHolder = artifacts.require("ReserveTokensHolder");
 
 // All of these constants need to be configured before deploy
 const addressBitcoinSuisse = "0x004B8b840DE404B607d6548b98c711Ac818D750e";
-const addressesCommunity = [
-    "0x2d1436D2Fe181212528c150E96df1c15f0e898d3",
-    "0x0581E7aF436e9380a8B772885A66Bd84F790939D",
-    "0x57a491D445D51C351E9435289dEc6D2d850aA952",
-    "0x912EEcc593B9D53d566e741744cc8DfCf5370844",
-];
-const multisigCommunityReqs = 2;
+const addressMainOwner = "0x0581E7aF436e9380a8B772885A66Bd84F790939D";
 
 const addressesReserve = [
     "0x2d1436D2Fe181212528c150E96df1c15f0e898d3",
-    "0x0581E7aF436e9380a8B772885A66Bd84F790939D",
+    addressMainOwner,
     "0x57a491D445D51C351E9435289dEc6D2d850aA952",
     "0x912EEcc593B9D53d566e741744cc8DfCf5370844",
 ];
@@ -28,7 +22,7 @@ const multisigReserveReqs = 2;
 
 const addressesDevs = [
     "0x2d1436D2Fe181212528c150E96df1c15f0e898d3",
-    "0x0581E7aF436e9380a8B772885A66Bd84F790939D",
+    addressMainOwner,
     "0x57a491D445D51C351E9435289dEc6D2d850aA952",
     "0x912EEcc593B9D53d566e741744cc8DfCf5370844",
 ];
@@ -36,7 +30,7 @@ const multisigDevsReqs = 2;
 
 const addressesBounties = [
     "0x2d1436D2Fe181212528c150E96df1c15f0e898d3",
-    "0x0581E7aF436e9380a8B772885A66Bd84F790939D",
+    addressMainOwner,
     "0x57a491D445D51C351E9435289dEc6D2d850aA952",
     "0x912EEcc593B9D53d566e741744cc8DfCf5370844",
 ];
@@ -50,7 +44,6 @@ module.exports = async function(deployer, network, accounts) {
     // if (network === "development") return;  // Don't deploy on tests
 
     // MultiSigWallet send
-    let multisigCommunityFuture = MultiSigWallet.new(addressesCommunity, multisigCommunityReqs);
     let multisigReserveFuture = MultiSigWallet.new(addressesReserve, multisigReserveReqs);
     let multisigDevsFuture = MultiSigWallet.new(addressesDevs, multisigDevsReqs);
     let multisigBountiesFuture = MultiSigWallet.new(addressesBounties, multisigBountiesReqs);
@@ -58,8 +51,6 @@ module.exports = async function(deployer, network, accounts) {
     let miniMeTokenFactoryFuture = MiniMeTokenFactory.new();
 
     // MultiSigWallet wait
-    let multisigCommunity = await multisigCommunityFuture;
-    console.log("MultiSigWallet Community: " + multisigCommunity.address);
     let multisigReserve = await multisigReserveFuture;
     console.log("MultiSigWallet Reserve: " + multisigReserve.address);
     let multisigDevs = await multisigDevsFuture;
@@ -119,7 +110,7 @@ module.exports = async function(deployer, network, accounts) {
 
     // REALPlaceHolder send
     let realPlaceHolderFuture = REALPlaceHolder.new(
-        multisigCommunity.address,
+        addressMainOwner,
         real.address,
         realCrowdsale.address);
 
