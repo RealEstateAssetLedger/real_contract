@@ -46,6 +46,8 @@ library SafeMath {
   }
 
   function percent(uint a, uint b) internal returns (uint) {
-    return b * a / 100;
+    uint c = a * b;
+    assert(a == 0 || c / a == b);
+    return c / 100;
   }
 }
