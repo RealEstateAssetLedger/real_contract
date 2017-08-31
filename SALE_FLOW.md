@@ -1,6 +1,7 @@
 # REAL Initial Sale flow
 
-Example of a successful testnet sale: [REAL Crowdsale] (https://ropsten.etherscan.io/address/0xB27A07DD8fCB748C5788712bf6E4DcCe2BD423fB)
+Example of a successful testnet sale: [REAL Crowdsale](https://ropsten.etherscan.io/address/0xB27A07DD8fCB748C5788712bf6E4DcCe2BD423fB)
+
 Testnet REAL Token: [REAL](https://ropsten.etherscan.io/token/0x22e829aa4f599ac5357b34e90ad4554d3cb44497)
 
 
