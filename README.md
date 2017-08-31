@@ -51,3 +51,5 @@ Sale:
 - [MultisigWallet.sol](/contracts/MultiSigWallet.sol): Gnosis multisig used for REAL and community multisigs.
 
 ## Reviewers and audits
+
+- [Coinfabrik](/assets/Real_crowdsale_contract_audit.pdf): Coinfabrik contract audit. Issues were corrected [here](https://github.com/RealEstateAssetLedger/real_contract/commit/1afc5d0ca2b193a8cfb7db1d2747130b0b8c6ece) and [here](https://github.com/RealEstateAssetLedger/real_contract/commit/5e17245429ef04e331c7841a2322e38b74216eb2)
