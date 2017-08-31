@@ -2,6 +2,10 @@
 
 <img width="200px" src="assets/logo_real.png"/>
 
+##REAL Token Address
+You can get the address from [https://www.real.markets](https://www.real.markets), take into account that the address has to start with 0x9214 and ends with ab10.
+
+
 Important resources:
 - If integrating REAL in an exchange or automated system, please read: [A note for exchanges or holders interacting with REAL in an automated manner](https://real.markets)
 - [Sale spec](SPEC.md)
